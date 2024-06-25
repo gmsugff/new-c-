@@ -1,0 +1,119 @@
+#include <iostream>
+
+template <class T>
+class Node {
+public:
+    T data;
+    Node* next;
+
+    Node(T val) {
+        data = val;
+        next = nullptr;
+    }
+};
+
+template <class T>
+class LinkedList {
+private:
+    Node<T>* head;
+    Node<T>* tail;
+
+public:
+    LinkedList() {
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    void add(T val) {
+        Node<T>* newNode = new Node<T>(val);
+
+        if (head == nullptr) {
+            head = newNode;
+            tail = newNode;
+        }
+        else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+    }
+
+    bool remove(T val) {
+        Node<T>* current = head;
+        Node<T>* prev = nullptr;
+
+        while (current != nullptr) {
+            if (current->data == val) {
+                if (prev == nullptr) {
+                    head = current->next;
+                }
+                else {
+                    prev->next = current->next;
+                }
+
+                delete current;
+                return true;
+            }
+
+            prev = current;
+            current = current->next;
+        }
+
+        return false;
+    }
+
+    Node<T>* find(T val) {
+        Node<T>* current = head;
+
+        while (current != nullptr) {
+            if (current->data == val) {
+                return current;
+            }
+
+            current = current->next;
+        }
+
+        return nullptr;
+    }
+
+    void printList() {
+        Node<T>* current = head;
+
+        while (current != nullptr) {
+            std::cout << current->data << " ";
+            current = current->next;
+        }
+
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    LinkedList<int> list;
+
+    list.add(1);
+    list.add(2);
+    list.add(3);
+    list.add(4);
+    list.add(5);
+    list.printList();
+
+    Node<int>* found = list.find(2);
+    if (found != nullptr) {
+        std::cout << "Element 2 found" << std::endl;
+    }
+    else {
+        std::cout << "Element 2 not found" << std::endl;
+    }
+
+    bool removed = list.remove(2);
+    if (removed) {
+        std::cout << "Element 2 removed" << std::endl;
+    }
+    else {
+        std::cout << "Element 2 not found for removal" << std::endl;
+    }
+
+    list.printList();
+
+    
+}
